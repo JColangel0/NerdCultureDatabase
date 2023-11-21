@@ -1,4 +1,4 @@
-# NerdCultureDatabase
+# Speculative Fiction Databse
 A localized search engine for specific information
 
 This projet uses web scraping in Python to search a cultivated set of websites for relevant information
