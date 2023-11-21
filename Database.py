@@ -15,26 +15,15 @@ def web_scrape(searchData, space_key, link, class_name, list):
 def search(searchData):
     try:
         page = web_scrape(
-            searchData, "-", "https://www.dccomics.com/characters/", "field-item even", True)
-        for i in page:
-            if i.get("property") == "schema:about content:encoded":
-                textSection = i.find_all("p")
-        returnValue = ""
-        for i in textSection:
-            returnValue += i.text + "\n"
-        return returnValue
+            searchData, "+", "https://www.fandom.com/?s=", "post grid-block small-12 mediawiki-article", False)
+        results = page.find_all("a")
+        finalResponse = requests.get(results[0]["href"])
+        finalSoup = BeautifulSoup(finalResponse.content, "html.parser")
+        information = finalSoup.find("div", {"class": "mw-parser-output"})
+        textSection = information.find_all("p", recursive=False)
+        return textSection[1].text
     except:
-        try:
-            page = web_scrape(
-                searchData, "+", "https://www.fandom.com/?s=", "post grid-block small-12 mediawiki-article", False)
-            results = page.find_all("a")
-            finalResponse = requests.get(results[0]["href"])
-            finalSoup = BeautifulSoup(finalResponse.content, "html.parser")
-            information = finalSoup.find("div", {"class": "mw-parser-output"})
-            textSection = information.find_all("p", recursive=False)
-            return textSection[1].text
-        except:
-            return "No Data Found"
+        return "No Data Found"
 
 def main():
     root = Tk()
